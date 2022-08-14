@@ -1,11 +1,14 @@
 require("dotenv").config;
 const express = require("express");
 const cors = require("cors");
-const dbConnect = require("./config/myql");
+const { dbConnectMysql } = require("./config/myql");
 const app = express();
+
+const ENGINE_DB = process.env.ENGINE_DB;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static("storage"));
 
 const port = process.env.PORT || 3000;
 
@@ -16,7 +19,8 @@ const port = process.env.PORT || 3000;
 app.use("/api", require("./routes"));
 
 app.listen(port, () => {
-  console.log(`Example app listen at http://localhost:${port}`);
+  console.log(`App listen at http://localhost:${port}`);
 });
 
-// dbConnect();
+dbConnectMysql();
+// ENGINE_DB === "mysql" ? dbConnectMysql() : null;
