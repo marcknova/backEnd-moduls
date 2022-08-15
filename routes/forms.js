@@ -1,10 +1,40 @@
 var express = require("express");
-const { getItems, getItem, createItem } = require("../controllers/forms");
+const {
+  getItems,
+  getItem,
+  createItem,
+  updateItem,
+  deleteItem,
+} = require("../controllers/forms");
+const {
+  validatorCreateItem,
+  validatorGetItem,
+} = require("../validators/forms");
 var router = express.Router();
 
-/* GET users listing. */
+/**
+ * Lista todos los formularios
+ */
 router.get("/", getItems);
-router.post("/", createItem);
-router.get("/:id", getItem);
+
+/**
+ * Lista un formulario por ID
+ */
+router.get("/:id", validatorGetItem, getItem);
+
+/**
+ * Crea un nuevo formulario
+ */
+router.post("/", validatorCreateItem, createItem);
+
+/**
+ * Actualizar formulario
+ */
+router.put("/:id", validatorGetItem, validatorCreateItem, updateItem);
+
+/**
+ * Eliminar formulario
+ */
+router.delete("/:id", validatorGetItem, deleteItem);
 
 module.exports = router;
