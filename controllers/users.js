@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { formsModel } = require("../models");
+const { usersModel } = require("../models");
 const { handleErrorHttp } = require("../utils/handleError");
 
 //TODO donde se iniciara todo
@@ -11,11 +11,11 @@ const { handleErrorHttp } = require("../utils/handleError");
  */
 const getItems = async (req, res) => {
   try {
-    await formsModel.findAll().then((data) => {
-      res.send({ data });
+    await usersModel.findAll().then((data) => {
+      res.send(data);
     });
   } catch (e) {
-    handleErrorHttp(res, "ERROR_GET_ITEMS");
+    handleErrorHttp(res, "ERROR_GET_ITMES");
   }
 };
 
@@ -28,7 +28,7 @@ const getItem = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const data = await formsModel.findByPk(id);
+    const data = await usersModel.findByPk(id);
     res.send({ data });
   } catch (e) {
     handleErrorHttp(res, "ERROR_GET_ITEM");
@@ -43,7 +43,7 @@ const getItem = async (req, res) => {
 const createItem = async (req, res) => {
   try {
     const body = matchedData(req);
-    const data = formsModel.create(body);
+    const data = usersModel.create(body);
     res.send({ data });
   } catch (e) {
     handleErrorHttp(res, "ERROR_CREATE_ITMES");
@@ -58,7 +58,7 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try {
     const { id, ...body } = matchedData(req);
-    const data = await formsModel.update(body, {
+    const data = await usersModel.update(body, {
       where: {
         id: id,
       },
@@ -78,7 +78,7 @@ const deleteItem = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const data = await formsModel.destroy({ where: { id: id } });
+    const data = await usersModel.destroy({ where: { id: id } });
     res.send({ data });
   } catch (e) {
     handleErrorHttp(res, "ERROR_DELETE_ITEM");

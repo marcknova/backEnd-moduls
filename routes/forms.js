@@ -6,6 +6,8 @@ const {
   updateItem,
   deleteItem,
 } = require("../controllers/forms");
+const checkRol = require("../middleware/role");
+const authMiddleware = require("../middleware/sesion");
 const {
   validatorCreateItem,
   validatorGetItem,
@@ -15,7 +17,7 @@ var router = express.Router();
 /**
  * Lista todos los formularios
  */
-router.get("/", getItems);
+router.get("/", authMiddleware, getItems);
 
 /**
  * Lista un formulario por ID

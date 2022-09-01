@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/myql");
+const User = require("./users");
 
 const Form = sequelize.define(
   "forms",
@@ -31,5 +32,17 @@ const Form = sequelize.define(
     timestamps: false,
   }
 );
+
+/**
+ * Implementando modelo personalizado
+ */
+
+Form.findAll = function () {
+  Form.belongsTo(User, {
+    foreignKey: "id",
+  });
+
+  return Form.findAll({ include: User });
+};
 
 module.exports = Form;
