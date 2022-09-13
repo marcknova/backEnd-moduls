@@ -8,12 +8,12 @@ const JWT_SECRET = process.env.JWT_SECRETE;
 const tokenSign = async (user) => {
   const signs = jwt.sign(
     {
-      id: user.id,
+      id: user.user_id,
       role: user.role,
     },
     JWT_SECRET,
     {
-      expiresIn: "2h",
+      expiresIn: "5h",
     }
   );
   return signs;

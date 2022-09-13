@@ -17,26 +17,56 @@ var router = express.Router();
 /**
  * Lista todos los formularios
  */
-router.get("/", authMiddleware, getItems);
+router.get(
+  "/",
+  authMiddleware,
+  checkRol(["user", "admin", "contador"]),
+  getItems
+);
 
 /**
  * Lista un formulario por ID
  */
-router.get("/:id", validatorGetItem, getItem);
+router.get(
+  "/:id",
+  validatorGetItem,
+  authMiddleware,
+  checkRol(["admin", "contador"]),
+  getItem
+);
 
 /**
  * Crea un nuevo formulario
  */
-router.post("/", validatorCreateItem, createItem);
+router.post(
+  "/",
+  validatorCreateItem,
+  authMiddleware,
+  checkRol(["user", "admin"]),
+  createItem
+);
 
 /**
  * Actualizar formulario
  */
-router.put("/:id", validatorGetItem, validatorCreateItem, updateItem);
+router.put(
+  "/:id",
+  validatorGetItem,
+  validatorCreateItem,
+  authMiddleware,
+  checkRol(["admin", "contador"]),
+  updateItem
+);
 
 /**
  * Eliminar formulario
  */
-router.delete("/:id", validatorGetItem, deleteItem);
+router.delete(
+  "/:id",
+  validatorGetItem,
+  authMiddleware,
+  checkRol(["admin", "contador"]),
+  deleteItem
+);
 
 module.exports = router;

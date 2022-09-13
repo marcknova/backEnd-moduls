@@ -3,8 +3,14 @@ const { sequelize } = require("../../config/myql");
 const User = require("./users");
 
 const Form = sequelize.define(
-  "forms",
+  "requisiciones",
   {
+    id_req: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
+    },
     nombre: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -27,6 +33,14 @@ const Form = sequelize.define(
     puesto: {
       type: DataTypes.STRING,
     },
+    user_id: {
+      type: DataTypes.INTEGER,
+      foreignKey: true,
+      references: {
+        model: "usuarios",
+        key: "user_id",
+      },
+    },
   },
   {
     timestamps: false,
@@ -37,12 +51,10 @@ const Form = sequelize.define(
  * Implementando modelo personalizado
  */
 
-Form.findAll = function () {
-  Form.belongsTo(User, {
-    foreignKey: "id",
-  });
-
-  return Form.findAll({ include: User });
-};
+// Form.belongsTo(User, {
+//   foreignKey: "user_id",
+//   constraints: false,
+//   as: "user",
+// });
 
 module.exports = Form;

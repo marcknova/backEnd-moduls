@@ -13,6 +13,7 @@ const validatorCreateItem = [
   check("correo").exists().notEmpty(),
   check("departamento").exists().notEmpty(),
   check("puesto").exists().notEmpty(),
+  check("user_id").exists().notEmpty(),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

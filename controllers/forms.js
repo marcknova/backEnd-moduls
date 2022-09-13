@@ -1,5 +1,7 @@
 const { matchedData } = require("express-validator");
+const sequelize = require("sequelize");
 const { formsModel } = require("../models");
+const { productsModel } = require("../models");
 const { handleErrorHttp } = require("../utils/handleError");
 
 //TODO donde se iniciara todo
@@ -11,11 +13,14 @@ const { handleErrorHttp } = require("../utils/handleError");
  */
 const getItems = async (req, res) => {
   try {
+    const user = req.user;
+    user.set("contraseña", undefined, { strict: false });
     await formsModel.findAll().then((data) => {
-      res.send({ data });
+      res.send({ data, user });
     });
   } catch (e) {
-    handleErrorHttp(res, "ERROR_GET_ITEMS");
+    console.log(e);
+    handleErrorHttp(res, "ERROR_GET_ITMES");
   }
 };
 
@@ -40,12 +45,28 @@ const getItem = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
+
 const createItem = async (req, res) => {
   try {
+    const user = req.user;
+    user.set("contraseña", undefined, { strict: false });
     const body = matchedData(req);
-    const data = formsModel.create(body);
-    res.send({ data });
+    const requisicion = await formsModel.create(body);
+    res.send({ requisicion, user });
+    let cont = 0;
+    let productos = [];
+    const id_req = requisicion.dataValues.id_req;
+    for (let i = 0; i < req.body.data.length; i++) {
+      let data = { ...req.body.data[i], id_product: cont++, id_req };
+      productos.push(data);
+    }
+    productsModel.bulkCreate(
+      productos,
+      { ignoreDuplicates: true },
+      { individualHooks: true }
+    );
   } catch (e) {
+    console.log(e);
     handleErrorHttp(res, "ERROR_CREATE_ITMES");
   }
 };

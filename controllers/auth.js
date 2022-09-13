@@ -28,32 +28,32 @@ const registerCtrl = async (req, res) => {
   }
 };
 
-const loginCtrl = async (req, res) => {
+const loginCtrl = async (req, res, next) => {
   try {
     req = matchedData(req);
     const user = await usersModel.findOne({
       where: { correo: req.correo },
     });
-    if (!user) {
+    if (user) {
+      const hassPassword = user.contraseña;
+
+      const check = await compare(req.contraseña, hassPassword);
+
+      if (!check) {
+        next(handleErrorHttp(res, "PASSWORD_INVALID", 401));
+        return;
+      }
+      user.set("contraseña", undefined, { strict: false });
+      const data = {
+        token: await tokenSign(user),
+        user,
+      };
+      res.setHeader("X-Foo", "bar");
+      res.send({ data });
+    } else {
       handleErrorHttp(res, "USER_NOT_EXITS", 404);
       return;
     }
-
-    const hassPassword = user.contraseña;
-
-    const check = await compare(req.contraseña, hassPassword);
-
-    if (!check) {
-      handleErrorHttp(res, "PASSWORD_INVALID", 401);
-      return;
-    }
-    user.set("contraseña", undefined, { strict: false });
-    const data = {
-      token: await tokenSign(user),
-      user,
-    };
-
-    res.send({ data });
   } catch (e) {
     console.log(e);
     handleErrorHttp(res, "ERROR_LOGIN_USER");

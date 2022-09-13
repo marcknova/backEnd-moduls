@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "dev": "pm2 start app.js"
   },
   "dependencies": {
     "@slack/webhook": "^6.1.0",
