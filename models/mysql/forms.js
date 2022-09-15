@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/myql");
-const User = require("./users");
+const Products = require("./products");
 
 const Form = sequelize.define(
   "requisiciones",
@@ -47,14 +47,9 @@ const Form = sequelize.define(
   }
 );
 
-/**
- * Implementando modelo personalizado
- */
-
-// Form.belongsTo(User, {
-//   foreignKey: "user_id",
-//   constraints: false,
-//   as: "user",
-// });
+// Option 1
+Form.hasMany(Products, {
+  foreignKey: "id_req",
+});
 
 module.exports = Form;

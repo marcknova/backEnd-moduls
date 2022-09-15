@@ -41,10 +41,4 @@ const Product = sequelize.define(
   }
 );
 
-// Product.associate = () => {
-//   Product.belongsTo(Form, { foreignKey: "id" });
-// };
-
-// return Role;
-
 module.exports = Product;

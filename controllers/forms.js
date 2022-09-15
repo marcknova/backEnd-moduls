@@ -1,5 +1,4 @@
 const { matchedData } = require("express-validator");
-const sequelize = require("sequelize");
 const { formsModel } = require("../models");
 const { productsModel } = require("../models");
 const { handleErrorHttp } = require("../utils/handleError");
@@ -15,9 +14,15 @@ const getItems = async (req, res) => {
   try {
     const user = req.user;
     user.set("contraseña", undefined, { strict: false });
-    await formsModel.findAll().then((data) => {
-      res.send({ data, user });
-    });
+    console.log(req);
+    await formsModel
+      .findAll({
+        include: [productsModel],
+      })
+      .then((data) => {
+        console.log(data);
+        res.send({ data, user });
+      });
   } catch (e) {
     console.log(e);
     handleErrorHttp(res, "ERROR_GET_ITMES");
