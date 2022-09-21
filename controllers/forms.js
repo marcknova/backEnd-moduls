@@ -14,13 +14,11 @@ const getItems = async (req, res) => {
   try {
     const user = req.user;
     user.set("contraseña", undefined, { strict: false });
-    console.log(req);
     await formsModel
       .findAll({
         include: [productsModel],
       })
       .then((data) => {
-        console.log(data);
         res.send({ data, user });
       });
   } catch (e) {
@@ -37,8 +35,8 @@ const getItems = async (req, res) => {
 const getItem = async (req, res) => {
   try {
     req = matchedData(req);
-    const { id } = req;
-    const data = await formsModel.findByPk(id);
+    const { id_req } = req;
+    const data = await formsModel.findByPk(id_req);
     res.send({ data });
   } catch (e) {
     handleErrorHttp(res, "ERROR_GET_ITEM");
@@ -83,10 +81,10 @@ const createItem = async (req, res) => {
  */
 const updateItem = async (req, res) => {
   try {
-    const { id, ...body } = matchedData(req);
+    const { id_req, ...body } = matchedData(req);
     const data = await formsModel.update(body, {
       where: {
-        id: id,
+        id_req: id_req,
       },
     });
     res.send({ data });
@@ -103,8 +101,8 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
   try {
     req = matchedData(req);
-    const { id } = req;
-    const data = await formsModel.destroy({ where: { id: id } });
+    const { id_req } = req;
+    const data = await formsModel.destroy({ where: { id_req: id_req } });
     res.send({ data });
   } catch (e) {
     handleErrorHttp(res, "ERROR_DELETE_ITEM");
