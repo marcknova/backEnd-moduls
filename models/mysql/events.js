@@ -14,7 +14,11 @@ const Events = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    color: {
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    allDay: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -26,18 +30,14 @@ const Events = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    busy: {
+    color: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    location: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    // location: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
   },
   {
     timestamps: false,

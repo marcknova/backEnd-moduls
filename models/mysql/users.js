@@ -11,7 +11,16 @@ const User = sequelize.define(
       autoIncrement: true,
       allowNull: false,
     },
+    nombre: {
+      type: DataTypes.STRING,
+    },
     usuario: {
+      type: DataTypes.STRING,
+    },
+    edad: {
+      type: DataTypes.INTEGER,
+    },
+    telefono: {
       type: DataTypes.STRING,
     },
     correo: {
