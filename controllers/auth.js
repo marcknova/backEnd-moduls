@@ -1,4 +1,4 @@
-const { matchedData } = require("express-validator");
+const { matchedData, body } = require("express-validator");
 const { usersModel } = require("../models");
 const { handleErrorHttp } = require("../utils/handleError");
 const { tokenSign } = require("../utils/handleJwt");
@@ -60,4 +60,34 @@ const loginCtrl = async (req, res, next) => {
   }
 };
 
-module.exports = { registerCtrl, loginCtrl };
+const changeEmail = async (req, res, next) => {
+  try {
+    const user = await usersModel.findOne({
+      where: { user_id: req.body.user_id },
+    });
+    if (user) {
+      const hassPassword = user.contraseña;
+      const check = await compare(req.body.contraseña, hassPassword);
+      if (check) {
+        const update = await user.update(
+          {
+            correo: req.body.newCorreo,
+          },
+          {
+            where: { user_id: req.body.user_id },
+          }
+        );
+        res.send({ update });
+      } else {
+        next(handleErrorHttp(res, "PASSWORD_INVALID", 401));
+        return;
+      }
+    } else {
+      handleErrorHttp(res, "USER_NOT_EXITS", 404);
+      return;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+module.exports = { registerCtrl, loginCtrl, changeEmail };
